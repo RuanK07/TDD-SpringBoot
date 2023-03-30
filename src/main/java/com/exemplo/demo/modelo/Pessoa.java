@@ -1,74 +1,87 @@
-package modelo;
+package com.exemplo.demo.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "pessoa")
 public class Pessoa {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(length = 80, nullable = false)
 	private String nome;
-	
-	@Column(length = 80, nullable = false)
+
+	@Column(length = 11, nullable = false)
 	private String cpf;
-	
+
 	@OneToMany(mappedBy = "pessoa")
 	private List<Endereco> enderecos = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "pessoa")
 	private List<Telefone> telefones = new ArrayList<>();
-	
-	
+
+	public Pessoa() {
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getCpf() {
 		return cpf;
 	}
+
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
 	public List<Endereco> getEnderecos() {
 		return enderecos;
 	}
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
+
+	public void adicionaEndereco(Endereco endereco) {
+		enderecos.add(endereco);
 	}
+
 	public List<Telefone> getTelefones() {
 		return telefones;
 	}
-	public void setTelefones(Telefone telefone) {
+
+	public void adicionaTelefone(Telefone telefone) {
 		telefones.add(telefone);
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -78,9 +91,12 @@ public class Pessoa {
 		if (getClass() != obj.getClass())
 			return false;
 		Pessoa other = (Pessoa) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
-	
-	
 
 }
