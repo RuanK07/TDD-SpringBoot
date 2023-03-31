@@ -72,7 +72,7 @@ public class PessoaServiceTest {
 
 	@Test
 	void naoDeveSalvarDuasPessoaComOMesmoTelefone() throws Exception {
-		when(pessoaRepository.findByTelefoneAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
+		when(pessoaRepository.findByTelefoneDddAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
 
 		assertThrows(UnicidadeTelefoneException.class, () -> sut.salvar(pessoa));
 	}
@@ -90,11 +90,11 @@ public class PessoaServiceTest {
 
 	@Test
 	void deveProcurarPessoaPeloDddENumeroDoTelefone() throws Exception {
-		when(pessoaRepository.findByTelefoneAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
+		when(pessoaRepository.findByTelefoneDddAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
 
 		Pessoa pessoaTeste = sut.buscarPorTelefone(telefone);
 
-		verify(pessoaRepository).findByTelefoneAndTelefoneNumero(DDD, NUMERO);
+		verify(pessoaRepository).findByTelefoneDddAndTelefoneNumero(DDD, NUMERO);
 
 		assertThat(pessoaTeste).isNotNull();
 		assertThat(pessoaTeste.getNome()).isEqualTo(NOME);
