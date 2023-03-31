@@ -20,25 +20,45 @@ public class PessoaRepositoryImpl implements PessoaRepositoryQueries{
 	@PersistenceContext
 	private EntityManager manager;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Pessoa> filtrar(PessoaFiltro filtro) {
 		final StringBuilder sb = new StringBuilder();
 		final Map<String, Object> params = new HashMap<>();
 		
-		sb.append("SELECT bean FROM Pessoa bean WHERE 1=1 ");
+		sb.append(" SELECT bean FROM Pessoa bean JOIN bean.telefones tele WHERE 1=1 ");
 		
 		preencherNomeSeNescessario(filtro, sb, params);
 		preencherCpfSeNescessario(filtro, sb, params);
+		preencherDddSeNescessario(filtro, sb, params);
+		preencherTelefoneSeNescessario(filtro, sb, params);
 		
 		TypedQuery<Pessoa> query = manager.createQuery(sb.toString(), Pessoa.class);
 		preencherParametrosDaQuery(params, query);
+		
 		return query.getResultList();
+	}
+
+	private void preencherTelefoneSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+			final Map<String, Object> params) {
+		if(StringUtils.hasText(filtro.getTelefone())) {
+			sb.append(" AND tele.numero = :numero ");
+			params.put("numero", filtro.getTelefone());
+		}
+	}
+
+	private void preencherDddSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+			final Map<String, Object> params) {
+		if(StringUtils.hasText(filtro.getDdd())) {
+			sb.append(" AND tele.ddd = :ddd ");
+			params.put("ddd", filtro.getDdd());
+		}
 	}
 
 	private void preencherCpfSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
 		if(StringUtils.hasText(filtro.getCpf())) {
-			sb.append("AND bean.cpf LIKE :cpf ");
+			sb.append(" AND bean.cpf LIKE :cpf ");
 			params.put("cpf", "%" + filtro.getCpf() + "%");
 		}
 	}
@@ -46,7 +66,7 @@ public class PessoaRepositoryImpl implements PessoaRepositoryQueries{
 	private void preencherNomeSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
 		if(StringUtils.hasText(filtro.getNome())) {
-			sb.append("AND bean.nome LIKE :nome ");
+			sb.append(" AND bean.nome LIKE :nome ");
 			params.put("nome", "%" + filtro.getNome() + "%");
 		}
 	}
