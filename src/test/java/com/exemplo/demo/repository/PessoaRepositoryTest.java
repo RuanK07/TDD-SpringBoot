@@ -46,7 +46,7 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void deve_encontar_pessoa_pelo_ddd_e_numero_de_telefone() throws Exception {
+	void deve_encontar_pessoa_pelo_ddd_e_numero_de_telefone() throws Exception {
 		Optional<Pessoa> optional = sut.findByTelefoneDddAndTelefoneNumero("86","35006330");
 		
 		assertThat(optional.isPresent()).isTrue();
@@ -59,14 +59,14 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void nao_deve_encontrar_pessoa_cujo_ddd_e_telefone_nao_estejam_cadastrados() throws Exception {
+	void nao_deve_encontrar_pessoa_cujo_ddd_e_telefone_nao_estejam_cadastrados() throws Exception {
 		Optional<Pessoa> optional = sut.findByTelefoneDddAndTelefoneNumero("11","324516731");
 		
 		assertThat(optional.isPresent()).isFalse();
 	}
 	
 	@Test
-	public void deve_filtrar_pessoas_por_parte_do_nome() throws Exception {
+	void deve_filtrar_pessoas_por_parte_do_nome() throws Exception {
 		PessoaFiltro filtro = new PessoaFiltro();
 		filtro.setNome("a");
 		
@@ -76,7 +76,7 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void deve_filtrar_pessoas_por_parte_do_cpf() throws Exception {
+	void deve_filtrar_pessoas_por_parte_do_cpf() throws Exception {
 		PessoaFiltro filtro = new PessoaFiltro();
 		filtro.setCpf("78");
 		
@@ -86,7 +86,7 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void deve_filtrar_pessoas_por_filtro_composto() throws Exception {
+	void deve_filtrar_pessoas_por_filtro_composto() throws Exception {
 		PessoaFiltro filtro = new PessoaFiltro();
 		filtro.setNome("a");
 		filtro.setCpf("78");
@@ -97,7 +97,7 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void deve_filtrar_pessoas_pelo_ddd_do_telefone() throws Exception {
+	void deve_filtrar_pessoas_pelo_ddd_do_telefone() throws Exception {
 		PessoaFiltro filtro = new PessoaFiltro();
 		filtro.setDdd("21");
 		
@@ -107,7 +107,7 @@ public class PessoaRepositoryTest {
 	}
 	
 	@Test
-	public void deve_filtrar_pessoas_pelo_numero_de_telefone() throws Exception{
+	void deve_filtrar_pessoas_pelo_numero_de_telefone() throws Exception{
 		PessoaFiltro filtro = new PessoaFiltro();
 		filtro.setTelefone("997504");
 		
