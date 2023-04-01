@@ -83,6 +83,12 @@ public class PessoaServiceTest {
 	}
 	
 	@Test
+	void deve_retornar_dados_do_telefone_dentro_da_excecao_de_telefone_nao_encontrado_exception() throws Exception {
+		TelefoneNaoEncontradoException e = assertThrows(TelefoneNaoEncontradoException.class, () -> sut.buscarPorTelefone(telefone));
+		assertEquals("Não existe pessoa com o telefone (" + DDD + ")" + NUMERO, e.getMessage());
+	}
+	
+	@Test
 	void deveRetornarDadosDoTelefoneDentroDaExcecaoDeTelefoneNaoEncontradoException() throws Exception {
 		TelefoneNaoEncontradoException e = assertThrows(TelefoneNaoEncontradoException.class, () -> sut.buscarPorTelefone(telefone));
 		assertEquals("Não existe pessoa com o telefone (" + DDD + ")" + NUMERO, e.getMessage());

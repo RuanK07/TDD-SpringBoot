@@ -30,6 +30,7 @@ public class PessoaResource {
 		
 		final Pessoa pessoa = pessoaService.buscarPorTelefone(telefone);
 		
-		return new ResponseEntity<Pessoa>(pessoa, HttpStatus.OK);
-	}
+		return new ResponseEntity<>(pessoa, HttpStatus.OK);
+		}
+	
 }
