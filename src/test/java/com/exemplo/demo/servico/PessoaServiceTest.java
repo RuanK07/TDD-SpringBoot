@@ -17,17 +17,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.exemplo.demo.modelo.Pessoa;
 import com.exemplo.demo.modelo.Telefone;
 import com.exemplo.demo.repository.PessoaRepository;
-import com.exemplo.demo.servico.PessoaService;
 import com.exemplo.demo.servico.exception.TelefoneNaoEncontradoException;
 import com.exemplo.demo.servico.exception.UnicidadeCpfException;
 import com.exemplo.demo.servico.exception.UnicidadeTelefoneException;
 
-import servico.impl.PessoaServiceImpl;
+import com.exemplo.demo.servico.impl.PessoaServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 public class PessoaServiceTest {
 
-	private static final String NOME = "Eduardo Freitas";
+	private static final String NOME = "Ruan Kennedy";
 	private static final String CPF = "1234567890";
 	private static final String DDD = "55";
 	private static final String NUMERO = "0987654321";
@@ -72,7 +71,7 @@ public class PessoaServiceTest {
 
 	@Test
 	void naoDeveSalvarDuasPessoaComOMesmoTelefone() throws Exception {
-		when(pessoaRepository.findByTelefoneDddAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
+		when(pessoaRepository.findByTelefoneAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
 
 		assertThrows(UnicidadeTelefoneException.class, () -> sut.salvar(pessoa));
 	}
@@ -87,20 +86,14 @@ public class PessoaServiceTest {
 		TelefoneNaoEncontradoException e = assertThrows(TelefoneNaoEncontradoException.class, () -> sut.buscarPorTelefone(telefone));
 		assertEquals("Não existe pessoa com o telefone (" + DDD + ")" + NUMERO, e.getMessage());
 	}
-	
-	@Test
-	void deveRetornarDadosDoTelefoneDentroDaExcecaoDeTelefoneNaoEncontradoException() throws Exception {
-		TelefoneNaoEncontradoException e = assertThrows(TelefoneNaoEncontradoException.class, () -> sut.buscarPorTelefone(telefone));
-		assertEquals("Não existe pessoa com o telefone (" + DDD + ")" + NUMERO, e.getMessage());
-	}
 
 	@Test
 	void deveProcurarPessoaPeloDddENumeroDoTelefone() throws Exception {
-		when(pessoaRepository.findByTelefoneDddAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
+		when(pessoaRepository.findByTelefoneAndTelefoneNumero(DDD, NUMERO)).thenReturn(Optional.of(pessoa));
 
 		Pessoa pessoaTeste = sut.buscarPorTelefone(telefone);
 
-		verify(pessoaRepository).findByTelefoneDddAndTelefoneNumero(DDD, NUMERO);
+		verify(pessoaRepository).findByTelefoneAndTelefoneNumero(DDD, NUMERO);
 
 		assertThat(pessoaTeste).isNotNull();
 		assertThat(pessoaTeste.getNome()).isEqualTo(NOME);

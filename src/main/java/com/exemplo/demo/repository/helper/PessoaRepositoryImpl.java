@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,64 +15,64 @@ import com.exemplo.demo.modelo.Pessoa;
 import com.exemplo.demo.repository.filtro.PessoaFiltro;
 
 @Component
-public class PessoaRepositoryImpl implements PessoaRepositoryQueries{
+public class PessoaRepositoryImpl implements PessoaRepositoryQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Pessoa> filtrar(PessoaFiltro filtro) {
 		final StringBuilder sb = new StringBuilder();
 		final Map<String, Object> params = new HashMap<>();
-		
-		sb.append(" SELECT bean FROM Pessoa bean JOIN bean.telefones tele WHERE 1=1 ");
-		
-		preencherNomeSeNescessario(filtro, sb, params);
-		preencherCpfSeNescessario(filtro, sb, params);
-		preencherDddSeNescessario(filtro, sb, params);
-		preencherTelefoneSeNescessario(filtro, sb, params);
-		
-		TypedQuery<Pessoa> query = manager.createQuery(sb.toString(), Pessoa.class);
-		preencherParametrosDaQuery(params, query);
-		
+
+		sb.append("SELECT p FROM Pessoa p JOIN p.telefones t WHERE 1=1");
+
+		preencherNomeSeNecessario(filtro, sb, params);
+		preencherCPFSeNecessario(filtro, sb, params);
+		preencherDddSeNecessario(filtro, sb, params);
+		preencherNumeroTelefoneSeNecessario(filtro, sb, params);
+
+		Query query = manager.createQuery(sb.toString(), Pessoa.class);
+		preencherParametroDaQuery(params, query);
+
 		return query.getResultList();
 	}
 
-	private void preencherTelefoneSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+	private void preencherNumeroTelefoneSeNecessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
-		if(StringUtils.hasText(filtro.getTelefone())) {
-			sb.append(" AND tele.numero = :numero ");
+		if (StringUtils.hasText(filtro.getTelefone())) {
+			sb.append(" AND t.numero = :numero ");
 			params.put("numero", filtro.getTelefone());
 		}
 	}
 
-	private void preencherDddSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+	private void preencherDddSeNecessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
-		if(StringUtils.hasText(filtro.getDdd())) {
-			sb.append(" AND tele.ddd = :ddd ");
+		if (StringUtils.hasText(filtro.getDdd())) {
+			sb.append(" AND t.ddd = :ddd ");
 			params.put("ddd", filtro.getDdd());
 		}
 	}
 
-	private void preencherCpfSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+	private void preencherCPFSeNecessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
-		if(StringUtils.hasText(filtro.getCpf())) {
-			sb.append(" AND bean.cpf LIKE :cpf ");
+		if (StringUtils.hasText(filtro.getCpf())) {
+			sb.append(" AND p.cpf LIKE :cpf ");
 			params.put("cpf", "%" + filtro.getCpf() + "%");
 		}
 	}
 
-	private void preencherNomeSeNescessario(PessoaFiltro filtro, final StringBuilder sb,
+	private void preencherNomeSeNecessario(PessoaFiltro filtro, final StringBuilder sb,
 			final Map<String, Object> params) {
-		if(StringUtils.hasText(filtro.getNome())) {
-			sb.append(" AND bean.nome LIKE :nome ");
+		if (StringUtils.hasText(filtro.getNome())) {
+			sb.append(" AND p.nome LIKE :nome ");
 			params.put("nome", "%" + filtro.getNome() + "%");
 		}
 	}
 
-	private void preencherParametrosDaQuery(final Map<String, Object> params, TypedQuery<Pessoa> query) {
-		for(Map.Entry<String, Object> param : params.entrySet()) {
+	private void preencherParametroDaQuery(final Map<String, Object> params, Query query) {
+		for (Map.Entry<String, Object> param : params.entrySet()) {
 			query.setParameter(param.getKey(), param.getValue());
 		}
 	}

@@ -27,27 +27,27 @@ import com.exemplo.demo.servico.exception.UnicidadeTelefoneException;
 public class PessoaResource {
 	
 	@Autowired
-	private PessoaService pessoaService;
+	private PessoaService service;
 
 	@GetMapping("/{ddd}/{numero}")
-	public ResponseEntity<Pessoa> buscarPorDddENumeroDoTelefone(@PathVariable("ddd") String ddd,
-																@PathVariable("numero") String numero) throws TelefoneNaoEncontradoException {
-		
+	public ResponseEntity<Pessoa> buscarPorDddENumeroTelefone(@PathVariable String ddd, 
+			  												  @PathVariable String numero) throws TelefoneNaoEncontradoException {
 		final Telefone telefone = new Telefone();
 		telefone.setDdd(ddd);
 		telefone.setNumero(numero);
 		
-		final Pessoa pessoa = pessoaService.buscarPorTelefone(telefone);
+		final Pessoa pessoa = service.buscarPorTelefone(telefone);
 		
 		return new ResponseEntity<>(pessoa, HttpStatus.OK);
-		}
+	}
 	
 	@PostMapping
 	public ResponseEntity<Pessoa> salvarNova(@RequestBody Pessoa pessoa, HttpServletResponse response) throws UnicidadeCpfException, UnicidadeTelefoneException {
-		final Pessoa pessoaSalva = pessoaService.salvar(pessoa);
+		final Pessoa pessoaSalva = service.salvar(pessoa);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{ddd}/{numero}")
 				.buildAndExpand(pessoa.getTelefones().get(0).getDdd(), pessoa.getTelefones().get(0).getNumero()).toUri();
+		
 		response.setHeader("Location", uri.toASCIIString());
 		
 		return new ResponseEntity<>(pessoaSalva, HttpStatus.CREATED);

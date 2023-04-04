@@ -16,11 +16,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.exemplo.demo.modelo.Pessoa;
 import com.exemplo.demo.repository.filtro.PessoaFiltro;
 
-@Sql(value = "load-database.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = "clean-database.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = "/load-database.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "/clean-database.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@TestPropertySource(locations = "classpath:/application-test.properties")
+@TestPropertySource("classpath:application-test.properties")
 public class PessoaRepositoryTest {
 
 	@Autowired
@@ -47,7 +47,7 @@ public class PessoaRepositoryTest {
 	
 	@Test
 	void deve_encontar_pessoa_pelo_ddd_e_numero_de_telefone() throws Exception {
-		Optional<Pessoa> optional = sut.findByTelefoneDddAndTelefoneNumero("86","35006330");
+		Optional<Pessoa> optional = sut.findByTelefoneAndTelefoneNumero("86","35006330");
 		
 		assertThat(optional.isPresent()).isTrue();
 
@@ -60,7 +60,7 @@ public class PessoaRepositoryTest {
 	
 	@Test
 	void nao_deve_encontrar_pessoa_cujo_ddd_e_telefone_nao_estejam_cadastrados() throws Exception {
-		Optional<Pessoa> optional = sut.findByTelefoneDddAndTelefoneNumero("11","324516731");
+		Optional<Pessoa> optional = sut.findByTelefoneAndTelefoneNumero("11","324516731");
 		
 		assertThat(optional.isPresent()).isFalse();
 	}
