@@ -1,15 +1,16 @@
 package com.exemplo.demo.resources;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static io.restassured.RestAssured.given;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static io.restassured.RestAssured.given;
-
 import com.exemplo.demo.DemoApplicationTests;
 import com.exemplo.demo.modelo.Pessoa;
 import com.exemplo.demo.modelo.Telefone;
+import com.exemplo.demo.repository.filtro.PessoaFiltro;
 
 import io.restassured.http.ContentType;
 
@@ -95,6 +96,26 @@ public class PessoaResourceTest extends DemoApplicationTests{
 				.log().body().and()
 				.statusCode(HttpStatus.BAD_REQUEST.value())
 				.body("message", equalTo("Já existe pessoa cadastrada com o CPF '72788740417'"));
+	}
+	
+	@Test
+	void deve_filtrar_pessoas_pelo_nome() throws Exception {
+		final PessoaFiltro filtro = new PessoaFiltro();
+		filtro.setNome("a");
+
+		given()
+				.request()
+				.header("Accept", ContentType.ANY)
+				.header("Content-type", ContentType.JSON)
+				.body(filtro)
+		.when()
+		.post("/pessoas/filtrar")
+		.then()
+				.log().body().and()
+				.statusCode(HttpStatus.OK.value())
+				.body("id", containsInAnyOrder(1, 3, 5),
+						"nome", containsInAnyOrder("Thiago", "Iago", "Cauê"),
+						"cpf", containsInAnyOrder("86730543540", "38767897100", "72788740417"));
 	}
 	
 }

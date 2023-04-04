@@ -6,7 +6,7 @@ public class PessoaFiltro {
 	private String cpf;
 	private String ddd;
 	private String telefone;
-	
+
 	public String getNome() {
 		return nome;
 	}
