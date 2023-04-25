@@ -24,7 +24,7 @@ public class Endereco {
 	private String estado;
 
 	@ManyToOne
-	@JoinColumn(name = "codigo_pessoa")
+	@JoinColumn(name = "id_pessoa")
 	private Pessoa pessoa;
 
 	public Endereco() {
