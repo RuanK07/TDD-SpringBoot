@@ -48,10 +48,6 @@ O Rest Assured é uma biblioteca Java para testes de API RESTful. Com o Rest Ass
 à escrita de testes em BDD. A biblioteca suporta a validação de status de resposta,
 validação de campos de resposta, autenticação e autorização, entre outras funcionalidades.
 
-
-## Tecnologias utilizadas
-- Java
-
 # Autor
 
 Ruan Kennedy Freire Mendes
